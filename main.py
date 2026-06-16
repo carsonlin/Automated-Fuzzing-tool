@@ -13,7 +13,9 @@ import sys
 
 from playwright.sync_api import sync_playwright
 
+from fuzzer.classifier import classify_all
 from fuzzer.discovery import discover_forms
+from fuzzer.payloads import generate_for
 
 
 def run(url: str, headless: bool = True) -> None:
@@ -23,6 +25,8 @@ def run(url: str, headless: bool = True) -> None:
         page.goto(url, wait_until="networkidle")
 
         forms = discover_forms(page)
+        for form in forms:
+            classify_all(form.fields)
         _print_report(url, forms)
 
         browser.close()
@@ -33,13 +37,15 @@ def _print_report(url: str, forms) -> None:
     for i, form in enumerate(forms):
         print(f"  [Form {i}] {form.method.upper()} {form.action or '(no action)'}")
         for field in form.fields:
+            payloads = generate_for(field)
             print(
                 f"      - {field.tag}"
                 f" name={field.name!r}"
-                f" type={field.html_type!r}"
-                f" label={field.label!r}"
-                + (f" pattern={field.pattern!r}" if field.pattern else "")
+                f" => {field.field_type.value.upper()}"
+                f" ({len(payloads)} payloads)"
             )
+            for p in payloads[:3]:
+                print(f"          [{p.vuln}] {p.value[:40]!r}")
         if form.submitter:
             print(f"      > submit via name={form.submitter.name!r}")
         print()
