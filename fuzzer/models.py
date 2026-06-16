@@ -5,8 +5,14 @@ the submit trigger we click. Keeping these as plain dataclasses keeps the
 stages (discovery -> classify -> payload -> submit -> analyze) decoupled.
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field as dc_field
 from enum import Enum
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .payloads.base import Payload
 
 
 class FieldType(Enum):
@@ -64,3 +70,15 @@ class Form:
     selector: str
     fields: list[Field] = dc_field(default_factory=list)
     submitter: Submitter | None = None
+
+
+@dataclass
+class SubmitResult:
+    """What came back from submitting one payload (produced by the engine)."""
+
+    field_name: str | None
+    payload: Payload
+    status: int | None       # HTTP status, or None if no navigation happened
+    body: str                # response HTML (for the analyzer to inspect)
+    elapsed_ms: float        # round-trip time (for time-based detection)
+    error: str | None = None

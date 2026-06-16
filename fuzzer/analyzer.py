@@ -17,8 +17,8 @@ is far more telling than a 500 on random input.
 import re
 from dataclasses import dataclass
 
+from .models import SubmitResult
 from .payloads import PayloadCategory
-from .submitter import SubmitResult
 
 # Time-based blind injection: if a SLEEP/delay payload comes back this slow,
 # it likely actually executed. Tunable.
