@@ -12,6 +12,10 @@ env/
 test-results/
 playwright-report/
 
+# Fuzzer scan output (regenerated each run)
+findings.json
+*.findings.json
+
 # IDE / OS
 .vscode/
 .idea/
