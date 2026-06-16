@@ -1,0 +1,19 @@
+# Python bytecode cache (auto-generated, safe to delete)
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Playwright / test output
+test-results/
+playwright-report/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
