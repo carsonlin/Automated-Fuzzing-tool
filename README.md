@@ -100,17 +100,3 @@ tests/
   server.py                   # local vulnerable target
   fixtures/sample_form.html   # static form for testing discovery offline
 ```
-
-## Known limitations
-
-- **Client-side constraints can blunt payloads.** The browser enforces
-  `maxlength`, `type=number`, etc. before submitting, so some payloads get
-  truncated/rejected before reaching the server. A raw-HTTP submission path
-  would bypass this.
-- **Dropdowns (`<select>`) aren't deeply fuzzed.** They currently receive
-  free-text payloads they can't actually accept; proper option-tampering is
-  future work.
-- **Single page only.** No crawling/link-following yet — it fuzzes the forms
-  on the URL you give it.
-- **Findings are signals, not proof.** Each finding is a strong indicator
-  worth manual confirmation, not a guaranteed exploit.
